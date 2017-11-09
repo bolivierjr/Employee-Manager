@@ -1,7 +1,26 @@
 import React from 'react';
-import { Stack, Scene, Router } from 'react-native-router-flux';
+import { View, TouchableOpacity } from 'react-native';
+import { Stack, Scene, Router, Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Ionicons';
 import LoginForm from './components/LoginForm';
 import EmployeeList from './components/EmployeeList';
+import EmployeeCreate from './components/EmployeeCreate';
+
+// Right button for NavBar
+const createRightButton = () => {
+  return (
+    <View>
+      <TouchableOpacity onPress={() => Actions.employeeCreate()}>
+        <Icon
+          name="md-add-circle"
+          size={25}
+          style={styles.buttonStyle}
+          color="white"
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const RouterComponent = () => {
   return (
@@ -18,11 +37,25 @@ const RouterComponent = () => {
             key="employeeList"
             component={EmployeeList}
             title="Employees"
+            renderRightButton={createRightButton}
+            initial
+          />
+          <Scene
+            key="employeeCreate"
+            component={EmployeeCreate}
+            title="Create Employee"
+            navBarButtonColor="white"
           />
         </Scene>
       </Stack>
     </Router>
   );
+};
+
+const styles = {
+  buttonStyle: {
+    marginRight: 15,
+  },
 };
 
 export default RouterComponent;
