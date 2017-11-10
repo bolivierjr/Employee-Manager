@@ -1,6 +1,10 @@
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
-import { EMPLOYEE_UPDATE } from './types';
+import {
+  EMPLOYEE_UPDATE,
+  EMPLOYEE_CREATE,
+  EMPLOYEES_FETCH_SUCCESS,
+} from './types';
 
 export const employeeUpdate = ({ prop, value }) => {
   return {
@@ -12,16 +16,37 @@ export const employeeUpdate = ({ prop, value }) => {
 export const employeeCreate = ({ name, phone, shift }) => {
   const { currentUser } = firebase.auth();
 
-  return async () => {
+  return async dispatch => {
     try {
       const dataStore = await firebase
         .database()
         .ref(`/users/${currentUser.uid}/employees`)
         .push({ name, phone, shift });
-
       Actions.pop();
+      dispatch({ type: EMPLOYEE_CREATE });
 
       return dataStore;
+    } catch (err) {
+      console.log(err);
+      Actions.pop();
+    }
+  };
+};
+
+export const employeesFetch = () => {
+  const { currentUser } = firebase.auth();
+
+  return dispatch => {
+    try {
+      firebase
+        .database()
+        .ref(`/users/${currentUser.uid}/employees`)
+        .on('value', snapshot => {
+          dispatch({
+            type: EMPLOYEES_FETCH_SUCCESS,
+            payload: snapshot.val(),
+          });
+        });
     } catch (err) {
       console.log(err);
     }
