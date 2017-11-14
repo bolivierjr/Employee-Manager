@@ -4,6 +4,7 @@ import {
   EMPLOYEE_UPDATE,
   EMPLOYEE_CREATE,
   EMPLOYEES_FETCH_SUCCESS,
+  EMPLOYEE_SAVE_SUCCESS,
 } from './types';
 
 export const employeeUpdate = ({ prop, value }) => {
@@ -49,6 +50,27 @@ export const employeesFetch = () => {
         });
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const employeeSave = ({ name, phone, shift, uid }) => {
+  const { currentUser } = firebase.auth();
+
+  return async dispatch => {
+    try {
+      const dataStore = await firebase
+        .database()
+        .ref(`/users/${currentUser.uid}/employees/${uid}`)
+        .set({ name, phone, shift });
+
+      Actions.pop();
+      dispatch({ type: EMPLOYEE_SAVE_SUCCESS });
+
+      return dataStore;
+    } catch (err) {
+      console.log(err);
+      Actions.pop();
     }
   };
 };

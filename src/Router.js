@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import LoginForm from './components/LoginForm';
 import EmployeeList from './components/EmployeeList';
 import EmployeeCreate from './components/EmployeeCreate';
+import EmployeeEdit from './components/EmployeeEdit';
 
 // Right button for NavBar
 const createRightButton = () => {
@@ -44,6 +45,12 @@ const RouterComponent = () => {
             key="employeeCreate"
             component={EmployeeCreate}
             title="Create Employee"
+            navBarButtonColor="white"
+          />
+          <Scene
+            key="employeeEdit"
+            component={EmployeeEdit}
+            title="Edit Employee"
             navBarButtonColor="white"
           />
         </Scene>
