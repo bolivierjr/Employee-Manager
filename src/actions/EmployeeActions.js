@@ -29,7 +29,6 @@ export const employeeCreate = ({ name, phone, shift }) => {
       return dataStore;
     } catch (err) {
       console.log(err);
-      Actions.pop();
     }
   };
 };
@@ -70,7 +69,24 @@ export const employeeSave = ({ name, phone, shift, uid }) => {
       return dataStore;
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const employeeDelete = ({ uid }) => {
+  const { currentUser } = firebase.auth();
+  console.log(uid);
+  return async () => {
+    try {
+      const dataErase = await firebase
+        .database()
+        .ref(`/users/${currentUser.uid}/employees/${uid}`)
+        .remove();
       Actions.pop();
+      console.log(dataErase);
+      return dataErase;
+    } catch (err) {
+      console.log(err);
     }
   };
 };
